@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void addUser(User user, Set<Long> roleIds) {
         if(roleIds != null) {
             user.setRoles(roleIds.stream()
@@ -49,19 +50,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("couldn't find user with id " + id));
     }
 
-    @Override
-    @Transactional
-    public void save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-
-    }
 
     @Override
     @Transactional
     public void saveAll(List<User> users) {
         userRepository.saveAll(users);
     }
+
     @Override
     @Transactional
     public void update(User updatedUser, Set<Long> roleIds) {
@@ -78,14 +73,13 @@ public class UserServiceImpl implements UserService {
         if(updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
             updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
-        System.out.println("Апдейт юзера");
-        userRepository.save(updatedUser);
+        userRepository.save(user);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        if (id > 0 && id != null) {
+        if (id != null && id  > 0) {
             userRepository.deleteById(id);
         }
     }

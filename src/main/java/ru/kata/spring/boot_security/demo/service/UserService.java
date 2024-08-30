@@ -12,8 +12,6 @@ public interface UserService {
 
     User findById(Long id);
 
-    void save(User user);
-
     void saveAll(List<User> users);
 
     void update(User updatedUser, Set<Long> roleIds);
